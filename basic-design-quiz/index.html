@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기초설계 간단 퀴즈</title>
+<style>
+  body{font-family:"Malgun Gothic",sans-serif;background:#f3f5f9;margin:0;color:#222}
+  .card{max-width:560px;margin:40px auto;background:#fff;border-radius:14px;padding:28px;box-shadow:0 2px 10px #0002}
+  h1{font-size:22px;margin-top:0}
+  .prog{color:#667;font-size:14px;margin-bottom:8px}
+  .q{font-size:19px;margin:10px 0 18px}
+  button.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin:8px 0;font-size:16px;border:1px solid #ccd;border-radius:8px;background:#fff;cursor:pointer}
+  button.opt:hover:not(:disabled){background:#eef3ff}
+  button.ok{background:#d8f5de!important;border-color:#3a9b52}
+  button.no{background:#fbdada!important;border-color:#c44}
+  .fb{margin:12px 0;min-height:24px;font-size:15px}
+  .main{padding:11px 22px;font-size:16px;border:0;border-radius:8px;background:#3559d8;color:#fff;cursor:pointer}
+  .main:disabled{background:#aab}
+  .score{font-size:40px;font-weight:bold;color:#3559d8}
+</style>
+</head>
+<body>
+<div class="card" id="app"></div>
+<script>
+const Q=[
+ {q:"평가 방법에서 중간고사·팀 프로젝트·기말고사는 각각 몇 %일까요?",o:["20%·40%·30%","30%·30%·30%","30%·40%·20%","25%·25%·40%"],a:1,e:"세 항목 모두 30%, 출석 10%입니다."},
+ {q:"이 수업의 교재는 무엇일까요?",o:["창의적공학설계","기초설계 입문","공학과 창의성","발명의 원리"],a:0,e:"김은경 지음, 한빛미디어의 «창의적공학설계»입니다."},
+ {q:"다음 중 아이디어 도출 기법으로 배우는 것이 아닌 것은?",o:["스캠퍼","발명원리","분리원리","회계원리"],a:3,e:"8~11주에 스캠퍼·발명원리·분리원리·AIST를 배웁니다."},
+ {q:"문제 정의를 배우는 주차는 언제일까요?",o:["1~4주","5~7주","8~11주","12~14주"],a:1,e:"5~7주가 문제 정의 주차입니다."},
+ {q:"다음 중 이 수업의 학습목표에 해당하는 것은?",o:["팀 과제를 성공적으로 수행할 수 있다","외국어 회화를 할 수 있다","회계 장부를 작성할 수 있다","논문을 영어로 쓸 수 있다"],a:0,e:"공학과 창의성 이해, 설계 도구 활용, 팀 과제 수행이 학습목표입니다."}
+];
+let i=0,score=0;
+const app=document.getElementById("app");
+function start(){i=0;score=0;app.innerHTML=`<h1>기초설계 간단 퀴즈</h1><p>총 ${Q.length}문제, 한 문제씩 풉니다.</p><button class="main" onclick="show()">시작하기</button>`}
+function show(){
+  const x=Q[i];
+  app.innerHTML=`<div class="prog">${i+1} / ${Q.length}쪽</div><div class="q">${x.q}</div>`+
+   x.o.map((t,k)=>`<button class="opt" onclick="pick(${k})">${t}</button>`).join("")+
+   `<div class="fb" id="fb"></div><button class="main" id="nx" disabled onclick="next()">${i==Q.length-1?"결과 보기":"다음"}</button>`;
+}
+function pick(k){
+  const x=Q[i],bs=document.querySelectorAll(".opt");
+  bs.forEach((b,j)=>{b.disabled=true;if(j==x.a)b.classList.add("ok")});
+  if(k==x.a){score++;fb.textContent="정답! "+x.e}else{bs[k].classList.add("no");fb.textContent="아쉬워요. "+x.e}
+  nx.disabled=false;
+}
+function next(){i++;i<Q.length?show():app.innerHTML=`<h1>결과</h1><div class="score">${score} / ${Q.length}</div><p>${score==Q.length?"만점입니다!":score>=3?"잘하셨어요!":"한 번 더 도전해 보세요."}</p><button class="main" onclick="start()">다시 풀기</button>`}
+start();
+</script>
+</body>
+</html>
